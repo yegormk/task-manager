@@ -4,15 +4,7 @@ import User from '../models/user.js';
 const routerUser = new express.Router();
 
 routerUser.post('/users', async (req, res) => {
-  console.log(req.body);
   const user = new User(req.body);
-
-  // user.save().then(() => {
-  //   res.status(201).send(user);
-  // }).catch(err => {
-  //   console.log(err);
-  //   res.status(400).send(err);
-  // })
 
   try {
     await user.save();
@@ -20,17 +12,9 @@ routerUser.post('/users', async (req, res) => {
   } catch (e) {
     res.status(400).send(e);
   }
-
 });
 
 routerUser.get('/users', async (req, res) => {
-  // User.find({ }).then((users) => {
-  //   res.status(200).send(users);
-  // })
-  //   .catch((err) => {
-  //     res.status(500).send(err);
-  //   });
-
   try {
     const users = await User.find({ })
     res.status(201).send(users);
@@ -42,18 +26,6 @@ routerUser.get('/users', async (req, res) => {
 routerUser.get('/users/:id', async (req, res) => {
   const _id = req.params.id;
 
-  // User.findById(_id).then((user) => {
-  //   console.log('user:', user);
-  //   if (!user) {
-  //     res.status(404).send();
-  //   } else {
-  //     res.send(user);
-  //   }
-  // })
-  //   .catch((err) => {
-  //     res.status(500).send(err);
-  //   });
-
   try {
     const user = await User.findById(_id)
     if (!user) {
@@ -64,7 +36,6 @@ routerUser.get('/users/:id', async (req, res) => {
   } catch (e) {
     res.status(500).send(e);
   }
-  console.log(req.params.id);
 });
 
 routerUser.patch('/users/:id', async (req, res) => {
@@ -77,7 +48,12 @@ routerUser.patch('/users/:id', async (req, res) => {
   }
 
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const user = await User.findById(req.params.id);
+
+    updates.forEach((update) => user[update] = req.body[update]);
+    await user.save();
+
+    // const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
 
     if (!user) {
       res.status(404).send();
