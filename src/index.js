@@ -2,7 +2,6 @@ import './db/mongoose.js';
 import routerUser  from './routers/user.js';
 import routerTask  from './routers/task.js';
 import express from 'express';
-import bcrypt from 'bcryptjs';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,14 +15,13 @@ app.listen(port, () => {
 });
 
 
+
 // const myFunction = async () => {
-//   const password = 'Yegor1243';
-//   const hashedPassword = await bcrypt.hash(password, 10);
+//   const token = jsonwebtoken.sign({ _id: 'abc1234' }, 'thisismylearning', { expiresIn: '1 seconds' });
+//   console.log(token);
 //
-//   const isMatch = await bcrypt.compare('yegor1243', hashedPassword);
-//   console.log('password', password);
-//   console.log('hashedPassword', hashedPassword);
-//   console.log('isMatch', isMatch);
+//   const data = jsonwebtoken.verify(token, 'thisismylearning');
+//   console.log(data);
 // };
 //
 // myFunction();
