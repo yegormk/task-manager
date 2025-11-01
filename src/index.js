@@ -23,15 +23,3 @@ app.use(routerTask);
 app.listen(port, () => {
   console.log(`Server is running on port: ${ port }`);
 });
-
-
-
-// const myFunction = async () => {
-//   const token = jsonwebtoken.sign({ _id: 'abc1234' }, 'thisismylearning', { expiresIn: '1 seconds' });
-//   console.log(token);
-//
-//   const data = jsonwebtoken.verify(token, 'thisismylearning');
-//   console.log(data);
-// };
-//
-// myFunction();
