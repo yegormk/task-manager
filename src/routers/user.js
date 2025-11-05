@@ -108,6 +108,8 @@ routerUser.post('/users/me/avatar', upload.single('avatar'), async (req, res) =>
   } catch (e) {
     res.status(400).send(e);
   }
+}, (error, req, res, next) => {
+  res.status(400).send({ error: error.message });
 });
 
 export default routerUser;
