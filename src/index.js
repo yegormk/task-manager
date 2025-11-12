@@ -1,5 +1,4 @@
 import './db/mongoose.js';
-import './db/mongodb-atlas.js';
 import routerUser  from './routers/user.js';
 import routerTask  from './routers/task.js';
 import express from 'express';
