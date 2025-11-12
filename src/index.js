@@ -1,10 +1,11 @@
 import './db/mongoose.js';
+import './db/mongodb-atlas.js';
 import routerUser  from './routers/user.js';
 import routerTask  from './routers/task.js';
 import express from 'express';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use(routerUser);

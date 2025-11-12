@@ -4,7 +4,7 @@ import User from '../models/user.js';
 const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '')
-    const decoded = jsonwebtoken.verify(token, 'thisismylearning')
+    const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET)
     console.log(decoded);
 
     const user =
