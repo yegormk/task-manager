@@ -1,7 +1,13 @@
 import mongoose from 'mongoose';
 
-// const url = 'mongodb://127.0.0.1:27017/task-manager-api';
-mongoose.connect(process.env.MONGODB_ATLAS);
+// Prefer the Heroku-provided `MONGODB_URI`, fall back to local/dev env vars
+const mongoUrl = process.env.MONGODB_URI || process.env.MONGODB_ATLAS || process.env.MONGODB_URL;
+
+if (!mongoUrl) {
+  throw new Error('MongoDB connection string is missing. Set MONGODB_URI (Heroku), MONGODB_ATLAS, or MONGODB_URL.');
+}
+
+mongoose.connect(mongoUrl);
 
 // const Task = mongoose.model('Task',
 //   {

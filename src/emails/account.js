@@ -1,30 +1,37 @@
-import sendGridMail from '@sendgrid/mail'
+import sendGridMail from '@sendgrid/mail';
 
-sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
+const sendGridApiKey = process.env.SENDGRID_API_KEY;
+const sendEmailEnabled = Boolean(sendGridApiKey);
 
-// sendGridMail.send({
-//   to: 'yegor02092002@gmail.com',
-//   from: 'yegor02092002@gmail.com',
-//   subject: 'This is my first email!',
-//   text: 'I hope this one actually gets to you!'
-// });
+if (sendEmailEnabled) {
+  sendGridMail.setApiKey(sendGridApiKey);
+} else {
+  console.warn('SENDGRID_API_KEY is not set; welcome/cancel emails are disabled.');
+}
 
-export const sendWelcomeEmail = (email, name) => {
-  sendGridMail.send({
+const safeSend = async (message) => {
+  if (!sendEmailEnabled) return;
+
+  try {
+    await sendGridMail.send(message);
+  } catch (err) {
+    // Avoid crashing the dyno if email fails
+    console.error('Failed to send SendGrid email:', err);
+  }
+};
+
+export const sendWelcomeEmail = (email, name) =>
+  safeSend({
     to: email,
     from: 'yegor02092002@gmail.com',
     subject: 'Thanks for joining in!',
     text: `Welcome to the app, ${name}. Let me know how are you doing in the app!`,
   });
-}
 
-export const sendCancelEmail = (email, name) => {
-  sendGridMail.send({
+export const sendCancelEmail = (email, name) =>
+  safeSend({
     to: email,
     from: 'yegor02092002@gmail.com',
     subject: 'We are crying...',
     text: `Hey, ${name}, that's sad. We will miss you :(`,
   });
-}
-
-
