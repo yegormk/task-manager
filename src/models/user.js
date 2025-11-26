@@ -5,6 +5,12 @@ import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
 import Task from './task.js'
 
+const jwtSecret = process.env.JWT_SECRET;
+
+if (!jwtSecret) {
+  throw new Error('JWT_SECRET is not set. Define it in your environment (Heroku config var or local env file).');
+}
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -67,7 +73,7 @@ userSchema.virtual('tasks', {
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jsonwebtoken.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
+  const token = jsonwebtoken.sign({ _id: user._id.toString() }, jwtSecret);
 
   user.tokens = user.tokens.concat({ token });
   await user.save();
